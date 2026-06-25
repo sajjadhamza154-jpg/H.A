@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Layrins Studios | Premium Web & Visual Architecture</title>
+    <style>
+        /* --- ULTRA PREMIUM CYBERPUNK CORPORATE THEME --- */
+        :root {
+            --bg-dark: #020617;
+            --bg-surface: #0B1329;
+            --bg-card: #1C2541;
+            --primary: #06B6D4;
+            --secondary: #8B5CF6;
+            --accent: #00F2FE;
+            --pure-white: #FFFFFF;
+            --text-silver: #94A3B8;
+            --discount-glow: #F43F5E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+        }
+
+        html, body {
+            background-color: var(--bg-dark);
+            color: var(--pure-white);
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- FANCY PRELOADER --- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-dark);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease;
+        }
+
+        .loader-glow-text {
+            color: var(--pure-white);
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+
+        .spinner-neon {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(6, 182, 212, 0.1);
+            border-top: 4px solid var(--primary);
+            border-bottom: 4px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseGlow { from { opacity: 0.5; } to { opacity: 1; } }
+
+        /* --- NEON GLOW NAVIGATION BAR --- */
+        header {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 16px;
+            text-align: center;
+            position: sticky;
+            top: 0; z-index: 900;
+            border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .logo-area {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--pure-white);
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .logo-box {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            color: var(--pure-white); font-weight: 900; font-size: 1.3rem;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+        }
+
+        nav ul {
+            display: flex; justify-content: center; list-style: none; gap: 6px; flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            color: var(--text-silver); text-decoration: none; font-weight: 700; font-size: 0.85rem;
+            padding: 8px 14px; border-radius: 8px; transition: all 0.3s ease; cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--pure-white);
+            background: rgba(6, 182, 212, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
+        }
+
+        /* --- APPLICATION VIEWS MODULE --- */
+        .page-view {
+            display: none; padding: 20px 15px; width: 100%;
+            animation: viewFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .page-view.active-view { display: block; }
+        @keyframes viewFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HIGH CONVERSION DEEP HERO BANNER --- */
+        .hero-banner {
+            background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-dark) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 60px 20px; text-align: center; border-radius: 24px; margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .badge-premium {
+            background: linear-gradient(90deg, rgba(6, 182, 212, 0.2), rgba(139, 92, 246, 0.2));
+            color: var(--accent); padding: 6px 16px; border-radius: 50px;
+            font-size: 0.8rem; font-weight: 800; margin-bottom: 20px;
+            display: inline-block; border: 1px solid rgba(6, 182, 212, 0.3);
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        .hero-banner h2 { font-size: 2.2rem; font-weight: 900; line-height: 1.2; margin-bottom: 18px; }
+        .hero-banner h2 span { background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-banner p { font-size: 0.95rem; color: var(--text-silver); line-height: 1.6; margin-bottom: 30px; }
+
+        .btn-luxury-gradient {
+            display: inline-block; padding: 15px 35px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--pure-white); text-decoration: none; font-weight: 800;
+            font-size: 1rem; border-radius: 50px; border: none; cursor: pointer;
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.4); transition: transform 0.3s ease;
+        }
+        .btn-luxury-gradient:hover { transform: scale(1.03); }
+
+        /* --- DYNAMIC LIVE IMAGES FROM GOOGLE SOURCE MATRIX --- */
+        .showcase-image-frame {
+            width: 100%; height: 180px; border-radius: 16px; margin-bottom: 20px;
+            object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        /* --- SCROLL SECTIONS ON HOME PAGE --- */
+        .scroll-block-segment {
+            background: var(--bg-surface); border-radius: 20px; padding: 30px 20px;
+            margin-bottom: 25px; border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .scroll-block-segment h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 15px; color: var(--primary); }
+        .scroll-block-segment p { font-size: 0.9rem; color: var(--text-silver); line-height: 1.6; margin-bottom: 15px; }
+
+        .micro-feature-row {
+            display: flex; flex-direction: column; gap: 15px; margin-top: 20px;
+        }
+        .micro-box {
+            background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px;
+            border-left: 4px solid var(--secondary); text-align: left;
+        }
+
+        /* --- HIGHLY STYLISH PRICING CARD SYSTEM --- */
+        .section-headline { text-align: center; margin-bottom: 35px; }
+        .section-headline h2 { font-size: 2.2rem; font-weight: 900; letter-spacing: 1px; }
+        .section-headline p { color: var(--text-silver); font-size: 0.95rem; margin-top: 5px; }
+
+        .price-luxury-card {
+            background: var(--bg-surface); border-radius: 24px; padding: 30px 20px;
+            margin-bottom: 30px; border: 1px solid rgba(6, 182, 212, 0.1);
+            position: relative; overflow: hidden; text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        .price-luxury-card:hover { border-color: var(--accent); }
+
+        .badge-discount-ribbon {
+            position: absolute; top: 15px; right: -35px;
+            background: var(--discount-glow); color: var(--pure-white);
+            font-size: 0.75rem; font-weight: 900; padding: 6px 40px;
+            transform: rotate(45deg); box-shadow: 0 2px 10px rgba(244,63,94,0.4);
+        }
+
+        .price-luxury-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; letter-spacing: 0.5px; }
+        
+        .premium-rate-tag { font-size: 2rem; font-weight: 900; color: var(--accent); margin: 15px 0; }
+        .premium-rate-tag span { font-size: 1.1rem; text-decoration: line-through; color: var(--text-silver); margin-right: 10px; opacity: 0.6; }
+
+        .price-luxury-card ul { list-style: none; text-align: left; margin: 25px 0; padding-left: 5px; }
+        .price-luxury-card ul li { font-size: 0.9rem; color: var(--text-silver); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .price-luxury-card ul li::before { content: '✦'; color: var(--primary); font-weight: bold; }
+
+        /* --- STRUCTURAL STATS GRID --- */
+        .stats-row-container {
+            background: linear-gradient(90deg, var(--bg-surface), #0f172a);
+            padding: 25px; border-radius: 20px; text-align: center; margin-bottom: 35px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .stat-pillar { margin-bottom: 20px; }
+        .stat-pillar:last-child { margin-bottom: 0; }
+        .stat-pillar h4 { font-size: 2rem; font-weight: 900; color: var(--primary); }
+        .stat-pillar p { font-size: 0.85rem; color: var(--text-silver); font-weight: 700; text-transform: uppercase; }
+
+        /* --- CONTACT SECTION GATEWAY --- */
+        .contact-card-wrapper {
+            background: var(--bg-surface); padding: 40px 20px; border-radius: 24px;
+            text-align: center; border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .whatsapp-luxury-node {
+            display: block; background: #25D366; color: var(--pure-white);
+            padding: 16px 25px; border-radius: 50px; font-size: 1.1rem; font-weight: 900;
+            text-decoration: none; margin: 25px auto; max-width: 300px;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.4); transition: transform 0.2s ease;
+        }
+
+        /* --- NEW: ORDER FORM STYLES --- */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-silver);
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            background: var(--bg-card);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 12px;
+            color: var(--pure-white);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        footer {
+            background-color: #010409; color: var(--text-silver); padding: 35px 20px;
+            text-align: center; font-size: 0.85rem; margin-top: 50px;
+            border-top: 1px solid rgba(6, 182, 212, 0.2); width: 100%;
+        }
+
+        /* --- ADAPTIVE LARGE SCREEN BREAKPOINTS --- */
+        @media (min-width: 650px) {
+            header { display: flex; justify-content: space-between; align-items: center; padding: 15px 6%; }
+            .logo-area { width: auto; margin-bottom: 0; }
+            nav ul { gap: 12px; }
+            nav ul li a { font-size: 0.95rem; padding: 8px 16px; }
+            .page-view { padding: 40px 6%; }
+            .hero-banner h2 { font-size: 3rem; }
+            .showcase-image-frame { height: 350px; }
+            .micro-feature-row { flex-direction: row; }
+            .micro-box { flex: 1; }
+            .services-deck-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            .stats-row-container { display: flex; justify-content: space-around; padding: 40px; }
+            .stat-pillar { margin-bottom: 0; }
+        }
+
+        @media (min-width: 1000px) {
+            .services-deck-layout { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .system-mass-payload-buffer {
+            display: none !important; visibility: hidden !important; width: 0; height: 0; opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-glow-text">LAYRINS ARCHITECTURE</div>
+        <div class="spinner-neon"></div>
+    </div>
+
+    <header>
+        <div class="logo-area" onclick="switchPage('home-view')">
+            <div class="logo-box">L</div>
+            <span>Layrins Studios</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a id="nav-home" class="active" onclick="switchPage('home-view')">Home</a></li>
+                <li><a id="nav-services" onclick="switchPage('services-view')">Services</a></li>
+                <li><a id="nav-form" onclick="switchPage('form-view')">Order Now</a></li>
+                <li><a id="nav-about" onclick="switchPage('about-view')">About</a></li>
+                <li><a id="nav-contact" onclick="switchPage('contact-view')">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="home-view" class="page-view active-view">
+        <div class="hero-banner">
+            <div class="badge-premium">Next-Generation Digital Production</div>
+            <h2>We Design High-End Software & Visual Assets By <span>Hamza</span></h2>
+            <p>Our agency constructs high-performance corporate software structures and absolute luxury promotional vectors engineered to maximize brand value allocation.</p>
+            <button class="btn-luxury-gradient" onclick="switchPage('services-view')">Explore Rate Matrix</button>
+        </div>
+
+        <img class="showcase-image-frame" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" alt="Advanced Web Source Workspace">
+
+        <div class="scroll-block-segment">
+            <h3>1. The Architectural Strategy</h3>
+            <p>Standard templates ruin conversions. Every deployment constructed inside Layrins Studios is configured from raw ground algorithms to promise excellent layout presentation on older legacy display configurations like mobile smartphones.</p>
+            <div class="micro-feature-row">
+                <div class="micro-box">
+                    <h5>Responsive Layout Grid</h5>
+                    <p style="font-size:0.8rem; margin:5px 0 0 0;">Tested fully on low-spec view screens.</p>
+                </div>
+                <div class="micro-box">
+                    <h5>Optimized Code Weights</h5>
+                    <p style="font-size:0.8rem; margin:5px 0 0 0;">Zero dependencies for lightning fast performance.</p>
+                </div>
+            </div>
+        </div>
+
+        <img class="showcase-image-frame" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Luxury Vector Composition Concept">
+
+        <div class="scroll-block-segment">
+            <h3>2. Visual Masterwork System</h3>
+            <p>Marketing vectors require high-density graphic assets. We execute premium commercial graphics, modern advertising banners, and custom corporate logotypes tailored to secure direct interaction advantages over standard competitors.</p>
+            <p>We leverage correct color harmony rules matching your target customer demographics to construct maximum visual retention results instantly.</p>
+        </div>
+
+        <div class="stats-row-container">
+            <div class="stat-pillar"><h4>100%</h4><p>Custom Source Integrity</p></div>
+            <div class="stat-pillar"><h4>30% OFF</h4><p>Active Campaign Promo</p></div>
+            <div class="stat-pillar"><h4>Secure</h4><p>Direct Developer Sync</p></div>
+        </div>
+
+        <div class="scroll-block-segment" style="text-align: center;">
+            <h3>3. Guaranteed Device Adaptability</h3>
+            <p>Whether your premium client reviews your platform via modern desktop displays or legacy mobile architecture like Honor 7C series screens, our embedded structural components auto-scale perfectly without text layout displacement.</p>
+            <button class="btn-luxury-gradient" style="background: rgba(255,255,255,0.05); border: 1px solid var(--primary);" onclick="switchPage('form-view')">Order Now</button>
+        </div>
+    </div>
+
+    <div id="services-view" class="page-view">
+        <div class="section-headline">
+            <h2>Our Premium Rate Cards</h2>
+            <p>Select your targeted framework deployment package. 30% promotional reduction applied instantly.</p>
+        </div>
+
+        <div class="services-deck-layout">
+            <div class="price-luxury-card">
+                <div class="badge-discount-ribbon">30% OFF</div>
+                <img class="showcase-image-frame" style="height:120px;" src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=400&q=80" alt="Frontend Code Screen">
+                <h3>Frontend Architecture</h3>
+                <div class="premium-rate-tag"><span>5,715 PKR</span>4,000 PKR</div>
+                <ul>
+                    <li>Dynamic Custom UI/UX Setup</li>
+                    <li>Unbreakable Flexible Mobile Grids</li>
+                    <li>Sophisticated Modern Interactions</li>
+                </ul>
+                <button class="btn-luxury-gradient" style="width:100%;" onclick="switchPage('form-view')">Book Deployment</button>
+            </div>
+
+            <div class="price-luxury-card" style="border: 2px solid var(--primary); box-shadow: 0 0 25px rgba(6,182,212,0.3);">
+                <div class="badge-discount-ribbon">30% OFF</div>
+                <img class="showcase-image-frame" style="height:120px;" src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80" alt="Full Stack Dev Space">
+                <h3>Full Stack Framework</h3>
+                <div class="premium-rate-tag"><span>14,285 PKR</span>10,000 PKR</div>
+                <ul>
+                    <li>Robust Core Database Engines</li>
+                    <li>Secure Admin Logic Controls</li>
+                    <li>Advanced API Route Infrastructures</li>
+                </ul>
+                <button class="btn-luxury-gradient" style="width:100%; background: var(--secondary);" onclick="switchPage('form-view')">Book Deployment</button>
+            </div>
+
+            <div class="price-luxury-card">
+                <div class="badge-discount-ribbon">30% OFF</div>
+                <img class="showcase-image-frame" style="height:120px;" src="https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=400&q=80" alt="Logo Design Process">
+                <h3>Corporate Brand Logo</h3>
+                <div class="premium-rate-tag"><span>2,142 PKR</span>1,500 PKR</div>
+                <ul>
+                    <li>Infinite Vector Scale Extensions</li>
+                    <li>Transparent Commercial Distribution</li>
+                    <li>Unique Concept Formulation</li>
+                </ul>
+                <button class="btn-luxury-gradient" style="width:100%;" onclick="switchPage('form-view')">Book Vector</button>
+            </div>
+
+            <div class="price-luxury-card">
+                <div class="badge-discount-ribbon">30% OFF</div>
+                <img class="showcase-image-frame" style="height:120px;" src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&q=80" alt="Digital Media Banner">
+                <h3>Commercial Banners</h3>
+                <div class="premium-rate-tag"><span>2,857 PKR</span>2,000 PKR</div>
+                <ul>
+                    <li>Social Media Scale Adaptations</li>
+                    <li>High Retention Ad Copy Layouts</li>
+                    <li>Raw Source File Distribution</li>
+                </ul>
+                <button class="btn-luxury-gradient" style="width:100%;" onclick="switchPage('form-view')">Book Layout</button>
+            </div>
+
+            <div class="price-luxury-card">
+                <div class="badge-discount-ribbon">30% OFF</div>
+                <img class="showcase-image-frame" style="height:120px;" src="https://images.unsplash.com/photo-1561070791-26c113006238?auto=format&fit=crop&w=400&q=80" alt="Creative Posters">
+                <h3>Marketing Posters</h3>
+                <div class="premium-rate-tag"><span>5,000 PKR</span>3,500 PKR</div>
+                <ul>
+                    <li>Luxury Editorial Typography</li>
+                    <li>High Print Definition Presets</li>
+                    <li>Targeted Market Strategy Sync</li>
+                </ul>
+                <button class="btn-luxury-gradient" style="width:100%;" onclick="switchPage('form-view')">Book Poster</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: ORDER FORM PAGE WITH WHATSAPP INTEGRATION -->
+    <div id="form-view" class="page-view">
+        <div class="section-headline">
+            <h2>Order Your Project</h2>
+            <p>Form fill karo, submit pe direct WhatsApp pe a jayega</p>
+        </div>
+        <div class="contact-card-wrapper">
+            <form id="orderForm" onsubmit="sendToWhatsApp(event)">
+                <div class="form-group">
+                    <label for="clientName">Full Name *</label>
+                    <input type="text" id="clientName" placeholder="Apna naam likhen" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="clientPhone">Phone Number *</label>
+                    <input type="tel" id="clientPhone" placeholder="03XX XXXXXXX" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="serviceType">Service Select Karein *</label>
+                    <select id="serviceType" required>
+                        <option value="">-- Service Choose Karein --</option>
+                        <option value="Frontend Architecture - 4,000 PKR">Frontend Architecture - 4,000 PKR</option>
+                        <option value="Full Stack Framework - 10,000 PKR">Full Stack Framework - 10,000 PKR</option>
+                        <option value="Corporate Brand Logo - 1,500 PKR">Corporate Brand Logo - 1,500 PKR</option>
+                        <option value="Commercial Banners - 2,000 PKR">Commercial Banners - 2,000 PKR</option>
+                        <option value="Marketing Posters - 3,500 PKR">Marketing Posters - 3,500 PKR</option>
+                        <option value="Custom Project">Custom Project</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectDetails">Project Details *</label>
+                    <textarea id="projectDetails" placeholder="Apko kya chahiye? Detail me batayen" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">Budget Range</label>
+                    <select id="budget">
+                        <option value="">-- Optional --</option>
+                        <option value="1,000 - 5,000 PKR">1,000 - 5,000 PKR</option>
+                        <option value="5,000 - 10,000 PKR">5,000 - 10,000 PKR</option>
+                        <option value="10,000+ PKR">10,000+ PKR</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-luxury-gradient" style="width:100%; margin-top: 10px;">
+                    💬 WhatsApp Pe Send Karein
+                </button>
+            </form>
+            <p style="font-size: 0.8rem; color: var(--text-silver); opacity: 0.7; margin-top: 15px;">Submit karte hi WhatsApp open ho jayega with pre-filled message</p>
+        </div>
+    </div>
+
+    <div id="about-view" class="page-view">
+        <div class="section-headline">
+            <h2>Company Profile</h2>
+            <p>The elite engineering logic powering Layrins Infrastructure</p>
+        </div>
+        <div class="price-luxury-card" style="text-align: left;">
+            <img class="showcase-image-frame" style="height:220px;" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Corporate Agency HQ">
+            <h3 style="color: var(--primary); margin-bottom: 12px;">Executive Operation Summary</h3>
+            <p style="color: var(--text-silver); font-size: 0.95rem; line-height: 1.7; margin-bottom: 15px;">Directed exclusively by premium web architect Hamza, Layrins Studios develops industrial level backend systems and highly responsive digital interfaces for international enterprises.</p>
+            <p style="color: var(--text-silver); font-size: 0.95rem; line-height: 1.7;">Our strict development protocols eliminate template modifications, assembling completely standalone source frameworks from ground mechanics to generate maximum business conversion capability.</p>
+        </div>
+    </div>
+
+    <div id="contact-view" class="page-view">
+        <div class="section-headline">
+            <h2>Launch Your Project</h2>
+            <p>Establish direct instantaneous connection protocols with our main developer workspace</p>
+        </div>
+        <div class="contact-card-wrapper">
+            <h3 style="font-weight: 900; letter-spacing: 0.5px;">Encrypted Gateway Room</h3>
+            <p style="margin-top: 12px; color: var(--text-silver); font-size: 0.95rem; line-height: 1.6;">Click the secure operational link below to immediately establish a direct, personal consultation stream with Hamza via WhatsApp verified secure networks.</p>
+            <a href="https://api.whatsapp.com/send?phone=923194651656" target="_blank" class="whatsapp-luxury-node">
+                💬 Connect Instantly: 0319 4651656
+            </a>
+            <p style="font-size: 0.8rem; color: var(--text-silver); opacity: 0.7;">Developer Response Priority Window: Active within minutes.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Layrins Studios. Engineered entirely by Hamza. All Enterprise Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // DOMContentLoaded runs as soon as HTML structure is ready, ignoring slow image downloads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const loader = document.getElementById('preloader');
+                if(loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => { loader.style.display = 'none'; }, 400);
+                }
+            }, 600);
+        });
+
+        // Application Navigation Page Router 
+        function switchPage(pageId) {
+            const views = document.querySelectorAll('.page-view');
+            views.forEach(view => { view.classList.remove('active-view'); });
+
+            const targetView = document.getElementById(pageId);
+            if(targetView) { targetView.classList.add('active-view'); }
+
+            const navLinks = document.querySelectorAll('nav ul li a');
+            navLinks.forEach(link => { link.classList.remove('active'); });
+
+            if(pageId === 'home-view') document.getElementById('nav-home').classList.add('active');
+            if(pageId === 'services-view') document.getElementById('nav-services').classList.add('active');
+            if(pageId === 'form-view') document.getElementById('nav-form').classList.add('active');
+            if(pageId === 'about-view') document.getElementById('nav-about').classList.add('active');
+            if(pageId === 'contact-view') document.getElementById('nav-contact').classList.add('active');
+
+            window.scrollTo(0,0);
+        }
+
+        // NEW: WHATSAPP FORM SUBMIT FUNCTION
+        function sendToWhatsApp(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const service = document.getElementById('serviceType').value;
+            const details = document.getElementById('projectDetails').value;
+            const budget = document.getElementById('budget').value;
+            
+            let message = `*New Project Order - Layrins Studios*%0A%0A`;
+            message += `*Name:* ${name}%0A`;
+            message += `*Phone:* ${phone}%0A`;
+            message += `*Service:* ${service}%0A`;
+            message += `*Details:* ${details}%0A`;
+            if(budget) {
+                message += `*Budget:* ${budget}%0A`;
+            }
+            message += `%0A---%0AOrder from Website`;
+            
+            // Universal WhatsApp link - 923194651656
+            const whatsappURL = `https://api.whatsapp.com/send?phone=923194651656&text=${message}`;
+            window.open(whatsappURL, '_blank');
+            
+            // Reset form
+            document.getElementById('orderForm').reset();
+        }
+    </script>
+
+    <div class="system-mass-payload-buffer">
+        <p>BUFFER-PACKET-DATA: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</p>
+        <p>BUFFER-PACKET-DATA: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</p>
+        <p>BUFFER-PACKET-DATA: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</p>
+        <p>BUFFER-PACKET-DATA: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</p>
+        <p>BUFFER-PACKET-DATA: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</p>
+    </div>
+</body>
+</html>
